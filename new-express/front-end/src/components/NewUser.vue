@@ -71,9 +71,12 @@ import axios from "axios";
             email: "", 
             password: "",
         },
+        users: [],
       };
     },
     async created() {
+        this.users = await axios.get("http://host.docker.internal:8001/users").then((res) => res.data);
+        console.log(this.users)
     },
     methods: {
         closeDialog() {
@@ -82,14 +85,13 @@ import axios from "axios";
         async create() {
             await axios.post("http://host.docker.internal:8001/users", this.user)
               .then(() => {
-                this.showSuccessNotification("Tech notification is successfully created.");
-
+                console.log("Tech notification is successfully created.");
                 this.$emit("refresh");
 
                 this.closeDialog();
               })
-              .catch(() => {
-                this.showErrorNotification();
+              .catch((error) => {
+                console.log(error)
               });
         },
     },

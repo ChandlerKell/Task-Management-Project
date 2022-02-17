@@ -12,7 +12,7 @@
                 <p class="pb-0 mb-1">Title</p>
                 <v-text-field
                   filled
-                  v-model="task.subject"
+                  v-model="task.title"
                   label="Enter a short title"
                   :rules="rules.required"
                   hide-details
@@ -54,8 +54,6 @@
                     filled
                     :items="statuses"
                     item-text="name"
-                    multiple
-                    item-value="id"
                     v-model="task.status"
                     label="Related Stores"
                     required
@@ -71,7 +69,6 @@
                     filled
                     :items="users"
                     item-text="name"
-                    multiple
                     item-value="id"
                     v-model="task.userId"
                     label="Related Stores"
@@ -88,7 +85,6 @@
                     filled
                     :items="projects"
                     item-text="name"
-                    multiple
                     item-value="id"
                     v-model="task.projectId"
                     label="Related Stores"
@@ -121,7 +117,7 @@
           required: [(value) => !!value || "Required"],
         },
         task: {
-            subject: "", 
+            title: "", 
             summary: "", 
             description: "",
             status: "",
@@ -152,14 +148,14 @@
         async create() {
             await axios.post("http://host.docker.internal:8001/tasks", this.task)
               .then(() => {
-                this.showSuccessNotification("Tech notification is successfully created.");
+                console.log("Tech notification is successfully created.");
 
                 this.$emit("refresh");
 
                 this.closeDialog();
               })
-              .catch(() => {
-                this.showErrorNotification();
+              .catch((error) => {
+                console.log(error);
               }); //change
         },
     },

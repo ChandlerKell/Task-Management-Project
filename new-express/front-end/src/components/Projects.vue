@@ -54,6 +54,7 @@
 
 <script>
 import NewProject from "./NewProject";
+import axios from "axios";
   export default {
     name: 'Projects',
     components: { NewProject },
@@ -68,9 +69,13 @@ import NewProject from "./NewProject";
         newProjectDialogue: false, 
         projects: [],
     }),
+    async created() {
+      await this.getInitialData();
+    },
     methods: {
         async getInitialData() {
-            return this.projects;
+            this.projects = await axios.get("http://host.docker.internal:8001/projects").then((res) => res.data);
+            console.log(this.projects)
         },
     },
   }

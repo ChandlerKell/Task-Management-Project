@@ -76,6 +76,9 @@ import axios from "axios";
         newTaskDialogue: false, 
         tasks: [],
     }),
+    async created() {
+      await this.getInitialData();
+    },
     methods: {
         async getInitialData() {
             this.tasks = await axios.get("http://host.docker.internal:8001/tasks").then((res) => res.data);    

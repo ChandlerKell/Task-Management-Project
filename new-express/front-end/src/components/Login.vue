@@ -9,8 +9,10 @@
                 <br>
                 <v-btn @click="newUserDialogue = true" class="btn grey">Create User</v-btn>
                 <br>
-                <v-btn @click="doLogin">Login</v-btn>
-                <input type="submit" class="btn grey white--text pa-1 btn-primary" @click="doLogin">
+
+                <router-link class="grey" :to="{name: 'Tasks'}">
+                  <v-btn @click="doLogin">Login</v-btn>
+                </router-link>
             </form>
         </v-card>
     </v-row>

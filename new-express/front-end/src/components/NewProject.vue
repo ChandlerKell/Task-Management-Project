@@ -36,34 +36,31 @@
             <v-row>
               <v-col cols="12">
                 <p class="pb-0 mb-1">Status</p>
-                <v-autocomplete
+                <v-select
                     no-data-text="There Exists no Statuses"
                     filled
                     :items="statuses"
                     item-text="name"
-                    multiple
-                    item-value="id"
                     v-model="project.status"
-                    label="Related Stores"
+                    label="Select a Status"
                     required
-                  ></v-autocomplete>
+                  ></v-select>
                 </v-col>
             </v-row>
 
             <v-row>
               <v-col cols="12">
-                <p class="pb-0 mb-1">User</p>
-                <v-autocomplete
+                <p class="pb-0 mb-1">Assignee</p>
+                <v-select
                     no-data-text="There Exists no Users"
                     filled
                     :items="users"
                     item-text="name"
-                    multiple
                     item-value="id"
                     v-model="project.userId"
-                    label="Related Stores"
+                    label="Assign a User"
                     required
-                  ></v-autocomplete>
+                  ></v-select>
                 </v-col>
             </v-row>
           </v-form>
@@ -91,8 +88,7 @@ import axios from "axios";
           required: [(value) => !!value || "Required"],
         },
         project: {
-            subject: "", 
-            summary: "", 
+            name: "",
             description: "",
             status: "",
             userId: "",
@@ -118,16 +114,16 @@ import axios from "axios";
             this.$emit("close");
         },
         async create() {
-           await axios.post("http://host.docker.internal:8001/tasks", this.task)
+           await axios.post("http://host.docker.internal:8001/projects", this.project)
               .then(() => {
-                this.showSuccessNotification("Tech notification is successfully created.");
+                console.log("Tech notification is successfully created.");
 
                 this.$emit("refresh");
 
                 this.closeDialog();
               })
-              .catch(() => {
-                this.showErrorNotification();
+              .catch((error) => {
+                console.log(error);
               });
         },
     },
