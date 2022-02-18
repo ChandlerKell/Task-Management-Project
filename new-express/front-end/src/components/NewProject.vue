@@ -80,7 +80,7 @@ import axios from "axios";
   export default {
     name: "NewProject",
     components: {  },
-    props: ["dialog"],
+    props: ["dialog", "currentProject"],
     data() {
       return {
         valid: false,
@@ -88,6 +88,7 @@ import axios from "axios";
           required: [(value) => !!value || "Required"],
         },
         project: {
+            id: "",
             name: "",
             description: "",
             status: "",
@@ -108,6 +109,7 @@ import axios from "axios";
     },
     methods: {
         async getInitialData() {
+          this.project = this.currentProject;
             this.users = await axios.get("http://host.docker.internal:8001/users").then((res) => res.data);
         },
         closeDialog() {

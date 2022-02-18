@@ -11,17 +11,15 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        unique: "tenant_name",
         allowNull: false
       },
       email: {
         type: Sequelize.STRING,
-        unique: "tenant_name",
+        unique: true,
         allowNull: false
       },
       password: {
         type: Sequelize.STRING,
-        unique: "tenant_name",
         allowNull: false
       },
       created_at: {
@@ -39,8 +37,9 @@ module.exports = {
         allowNull: true
       }
     }, {
-      transaction: t
+          transaction: t
     });
+    await queryInterface.addIndex(tableName, [ email ], { transaction: t });
   }),
 
   down: (queryInterface) => queryInterface.sequelize.transaction(async (t) => {

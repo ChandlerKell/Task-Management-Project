@@ -1,4 +1,5 @@
 const { User } = require("../models");
+const bcrypt = require ('bcrypt');
 
 module.exports = {
     getAll: async (req, res) => {
@@ -23,11 +24,14 @@ module.exports = {
     },
     createUser: async (req, res) => {
         try {
-            console.log(req.body)
-            const { name, email, password } = req.body; 
-            console.log(name)
-            const newUser = await User.create({ name, email, password });
-            return res.status(201).send(newUser);
+            const { name, email, enteredPassword } = req.body; 
+            bcrypt.genSalt(10, async function(err, salt) {  
+                bcrypt.hash(enteredPassword, salt, async function(err, hash) {
+                    const password = hash;
+                    const newUser = await User.create({ name, email, password });
+                    return res.status(201).send(newUser);
+                });
+            });
         } catch (error) {
             console.log(error)
             return res.sendStatus(500)
@@ -43,6 +47,13 @@ module.exports = {
           }
       
           const updated = await user.update(req.body);
+          bcrypt.genSalt(10, async function(err, salt) {  
+            bcrypt.hash(enteredPassword, salt, async function(err, hash) {
+                const password = hash;
+                const updated = await user.update(name, email, password);
+                return res.status(201).send(updated);
+            });
+          });
       
           return res.status(200).send(updated);
         } catch (error) {
@@ -61,6 +72,29 @@ module.exports = {
           await User.destroy({ where: { id } });
       
           return res.status(200).send(id);
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    loginAttempt: async (req, res) => {
+        try {
+          const { email, password } = req.body;
+          const user = await User.findOne({ where: { email } });
+      
+          if (!user) {
+            return res.status(500).send({ error: `User with Email ${email} not found` });
+          }
+      
+          bcrypt.compare(password, user.password, function(err, result) {
+            if (result) {
+                console.log("password correct")
+                return res.status(200).send(true);
+            }
+            else {
+                console.log("password incorrect")
+                return res.status(200).send(false);
+            }
+          });
         } catch (error) {
             console.log(error)
         }

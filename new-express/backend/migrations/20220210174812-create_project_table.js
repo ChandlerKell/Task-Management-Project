@@ -49,6 +49,8 @@ module.exports = {
     });
 
     await queryInterface.addIndex(tableName, [ userId ], { transaction: t });
+    await queryInterface.addIndex(tableName, [ name ], { transaction: t });
+    await queryInterface.addIndex(tableName, [ status ], { transaction: t });
   }),
 
   down: (queryInterface) => queryInterface.sequelize.transaction(async (t) => {

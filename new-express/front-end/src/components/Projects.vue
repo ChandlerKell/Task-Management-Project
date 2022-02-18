@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <v-row class="text-center ml-auto mr-auto">
         <v-col>
             <v-row>
@@ -24,9 +24,9 @@
                             {{ item.name }}
                         </p>
                     </template>
-                    <template v-slot:item.user.id="{ item }">
+                    <template v-slot:item.User="{ item }">
                         <p class="text-lg">
-                            {{ item.user.id }}
+                            {{ item.User.name }}
                         </p>
                     </template>
                     <template v-slot:item.description="{ item }">
@@ -39,6 +39,15 @@
                             {{ item.status }}
                         </p>
                     </template>
+                    <template v-slot:item.actions="{ item }">
+                        <v-btn icon @click="editItem(item)">
+                            Edit
+                        </v-btn>
+                        <br>
+                        <v-btn icon color="error" @click="deleteItem(item)">
+                            Delete
+                        </v-btn>
+                    </template>
                 </v-data-table>
             </v-row>
             <new-project
@@ -46,6 +55,7 @@
                 :dialog="newProjectDialogue"
                 @close="newProjectDialogue = false"
                 @refresh="getInitialData"
+                :currentProject="currentProject"
             ></new-project>
         </v-col>
     </v-row>
@@ -61,13 +71,22 @@ import axios from "axios";
     data: () => ({
         headers: [
             { text: "Project Title", value: "name", width: "20%", class: "text-xl" },
-            { text: "Assignee", value: "userId", width: "15%" },
+            { text: "Assignee", value: "User", width: "15%" },
             { text: "Description", value: "description", width: "15%" },
             { text: "Status", value: "status", width: "15%" },
+            { text: "", value: "actions" },
             //description breakout
         ],
         newProjectDialogue: false, 
         projects: [],
+        currentProject: {
+            id: "",
+            name: "",
+            description: "",
+            status: "",
+            userId: "",
+        }, 
+        //authenticated: this.$store.authenticated,
     }),
     async created() {
       await this.getInitialData();
@@ -76,6 +95,19 @@ import axios from "axios";
         async getInitialData() {
             this.projects = await axios.get("http://host.docker.internal:8001/projects").then((res) => res.data);
             console.log(this.projects)
+        },
+        async deleteItem(item) {
+            await axios.delete(`http://host.docker.internal:8001/projects/${ item.id}`)
+            await this.getInitialData();
+        },
+        editItem(item) {
+            this.currentProject.id = item.id;
+            this.currentProject.name = item.name;
+            this.currentProject.description = item.description;
+            this.currentProject.status = item.status;
+            this.currentProject.userId = item.userId;
+
+            this.newProjectDialogue = true;
         },
     },
   }

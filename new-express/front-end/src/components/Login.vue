@@ -3,16 +3,14 @@
     <v-row class="text-center mt-10">
         <v-card color="primary" class="pa-2 ml-auto mr-auto mt-10">
             <form class="form-group">
-                <input v-model="usernameEntered" type="email" class="form-control white" placeholder="not a Username" required>
+                <input v-model="loginInfo.email" type="email" class="form-control white" placeholder="Email" required>
                 <br>
-                <input v-model="passwordEntered" type="password" class="white form-control" placeholder="Password" required>
+                <input v-model="loginInfo.password" type="password" class="white form-control" placeholder="Password" required>
                 <br>
                 <v-btn @click="newUserDialogue = true" class="btn grey">Create User</v-btn>
                 <br>
 
-                <router-link class="grey" :to="{name: 'Tasks'}">
-                  <v-btn @click="doLogin">Login</v-btn>
-                </router-link>
+                <v-btn @click="doLogin">Login</v-btn>
             </form>
         </v-card>
     </v-row>
@@ -26,17 +24,25 @@
 
 <script>
 import NewUser from "./NewUser";
+ import axios from "axios";
   export default {
     name: 'Login',
     components: { NewUser },
     data: () => ({
-      usernameEntered: "",
-      passwordEntered: "",
+      loginInfo: {
+        email: "",
+        password: "",
+      },
       newUserDialogue: false, 
+      login: false,
     }),
     methods: {
-      doLogin() {
-        console.log("submit button clicked");
+      async doLogin() {
+        this.login = await axios.put("http://host.docker.internal:8001/login", this.loginInfo).then((res) => res.data); 
+        if(this.login){
+          //this.$store.dispatch("authenticate");
+          this.$router.push('/tasks');
+        }
       },
     },
   }

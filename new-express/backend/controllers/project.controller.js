@@ -1,9 +1,9 @@
-const { Project } = require("../models");
+const { Project, User } = require("../models");
 
 module.exports = {
     getAll: async (req, res) => {
         try {
-            const projects = await Project.findAll();
+            const projects = await Project.findAll({ include: { model: User, required: false }});
             return res.send(projects);
         } catch (error) {
             console.log(error)
@@ -34,9 +34,21 @@ module.exports = {
     },
     createProject: async (req, res) => {
         try {
-            const { userId, name, description, status } = req.body; 
-            const newProject = await Project.create({ userId, name, description, status });
-            return res.status(201).send(newProject);
+            const { userId, name, description, status, id } = req.body; 
+            if(!id){
+                const newProject = await Project.create({ userId, name, description, status });
+                return res.status(201).send(newProject);
+            }
+
+            const project = await Project.findOne({ where: { id } });
+      
+            if (!project) {
+                return res.status(500).send({ error: `Project with ID ${id} not found` });
+            }
+        
+            const updated = await project.update(req.body);
+        
+            return res.status(200).send(updated);
         } catch (error) {
             console.log(error)
             return res.sendStatus(500)

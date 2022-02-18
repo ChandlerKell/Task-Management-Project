@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import vuetify from './plugins/vuetify.js'
+// import Vuex from 'vuex'
 
 
 import Login from './components/Login'
@@ -37,5 +38,29 @@ Vue.config.productionTip = false
 new Vue({
   router, 
   vuetify,
+  // store: new Vuex.Store({
+  //   state: {
+  //     authenticated: false
+  //   },
+  //   mutations: {
+  //     AUTHENTICATE (state) {
+  //       state.authenticated = true
+  //     },
+  //     DEAUTHENTICATE (state) {
+  //       state.authenticated = false
+  //     },
+  //   },
+  //   getters: {
+  //     authenticated: (state) => state.authenticated
+  //   },
+  //   actions: {
+  //     authenticate(context) { 
+  //       context.commit("AUTHENTICATE")
+  //     },
+  //     deauthenticate(context) { 
+  //       context.commit("DEAUTHENTICATE")
+  //     },
+  //   },
+  // }),
   render: h => h(App),
 }).$mount('#app')

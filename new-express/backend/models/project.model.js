@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Project.hasMany(models.Task, {
             foreignKey: "project_id",
         })
+        models.Project.belongsTo(models.User, {})
     };
 
     return Project;

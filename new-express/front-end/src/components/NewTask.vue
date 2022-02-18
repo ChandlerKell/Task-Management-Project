@@ -55,7 +55,7 @@
                     :items="statuses"
                     item-text="name"
                     v-model="task.status"
-                    label="Related Stores"
+                    label="Choose Status"
                     required
                   ></v-autocomplete>
                 </v-col>
@@ -71,7 +71,7 @@
                     item-text="name"
                     item-value="id"
                     v-model="task.userId"
-                    label="Related Stores"
+                    label="Choose User"
                     required
                   ></v-autocomplete>
                 </v-col>
@@ -87,7 +87,7 @@
                     item-text="name"
                     item-value="id"
                     v-model="task.projectId"
-                    label="Related Stores"
+                    label="Choose Project"
                     required
                   ></v-autocomplete>
                 </v-col>
@@ -109,7 +109,7 @@
   export default {
     name: "NewTask",
     components: {  },
-    props: ["dialog"],
+    props: ["dialog", "currentTask"],
     data() {
       return {
         valid: false,
@@ -139,6 +139,7 @@
     },
     methods: {
         async getInitialData() {
+            this.task = this.currentTask
             this.projects = await axios.get("http://host.docker.internal:8001/projects").then((res) => res.data);    
             this.users = await axios.get("http://host.docker.internal:8001/users").then((res) => res.data);
         },

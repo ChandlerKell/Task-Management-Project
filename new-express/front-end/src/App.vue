@@ -22,7 +22,7 @@
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
-      <router-link class="grey" :to="{name: 'Login'}">Login</router-link>
+      <router-link class="grey" :to="{name: 'Login'}">Logout</router-link>
       <v-spacer></v-spacer>
       <router-link class="grey" :to="{name: 'Tasks'}">Tasks</router-link>
       <v-spacer></v-spacer>

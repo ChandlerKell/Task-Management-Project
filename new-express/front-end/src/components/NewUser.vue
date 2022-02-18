@@ -35,7 +35,7 @@
               <v-col cols="12">
                 <v-text-field
                   filled
-                  v-model="user.password"
+                  v-model="user.enteredPassword"
                   label="Password"
                   :rules="rules.required"
                   hide-details
@@ -69,7 +69,7 @@ import axios from "axios";
         user: {
             name: "",
             email: "", 
-            password: "",
+            enteredPassword: "",
         },
         users: [],
       };
